@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="//platform.linkedin.com/in.js">
+        api_key: 77n4gr8j0vdx09
+        authorize: false
+        onLoad: onLinkedInLoad
+    </script>
+
+    <script type="text/javascript">
+        var text;
+
+    function onLinkedInLoad() {
+    //IN.Event.on(IN, "auth", getProfileData);
+    //IN.Event.on(IN, "auth", shareContent);
+        IN.Event.on(IN, "auth", createDOM);
+    }
+
+    function onSuccess(data) {
+        //alert("here");
+        // console.log(JSON.stringify(data));
+        //console.log(data.picture-url);
+        console.log(data);
+
+
+    }
+
+    function onError(error) {
+        console.log(error);
+
+    }
+
+    function createDOM(){
+        text=document.getElementById('data').value;
+        //alert(text);
+        shareContent();
+
+    }
+
+    function shareContent() {
+       // alert("here");
+        // Build the JSON payload containing the content to be shared
+
+        //"comment": "Check out developer.linkedin.com! http://linkd.in/1FC2PyG",
+        var payload = {
+            "comment": text,
+            "visibility": {
+                "code": "anyone"
+            }
+        };
+
+        IN.API.Raw("/people/~/shares?format=json")
+                .method("POST")
+                .body(JSON.stringify(payload))
+                .result(onSuccess)
+                .error(onError);
+        //<form id="myForm" action="loadDoc();" method=""GET">
+        //<script type="IN/Share">
+    }
+    </script>
+</head>
+<body>
+<div class="container">
+<form role="form">
+    <div class="form-group">
+        <label for="comment">Type your update in space provided:</label>
+        <textarea class="form-control" rows="5" name="data" id="data" value=""></textarea>
+    </div>
+</form>
+
+<script type="IN/Login"></script>
+    </div>
+</body>
+</html>

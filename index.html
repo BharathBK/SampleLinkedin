@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<head>
+    <title>Sample</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font: 20px Montserrat, sans-serif;
+            line-height: 1.8;
+            color: #f5f6f7;
+        }
+        p {font-size: 16px;}
+        .margin {margin-bottom: 45px;}
+        .bg-1 {
+            background-color: #1abc9c; /* Green */
+            color: #ffffff;
+        }
+        .bg-2 {
+            background-color: #474e5d; /* Dark Blue */
+            color: #ffffff;
+        }
+        .bg-3 {
+            background-color: #ffffff; /* White */
+            color: #555555;
+        }
+        .bg-4 {
+            background-color: #2f2f2f; /* Black Gray */
+            color: #fff;
+        }
+        .container-fluid {
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+        .navbar {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            border: 0;
+            border-radius: 0;
+            margin-bottom: 0;
+            font-size: 12px;
+            letter-spacing: 5px;
+        }
+        .navbar-nav  li a:hover {
+            color: #1abc9c !important;
+        }
+    </style>
+
+    <script type="text/javascript" src="//platform.linkedin.com/in.js">
+        api_key: 77n4gr8j0vdx09
+        authorize: false
+        onLoad: onLinkedInLoad
+    </script>
+
+    <script type="text/javascript">
+        var data1;
+        var data2;
+        var para;
+        var fn;
+        var ln;
+        var pic;
+        var a;
+
+        // Setup an event listener to make an API call once auth is complete
+        function onLinkedInLoad() {
+            IN.Event.on(IN, "auth", getProfileData);
+           // IN.Event.on(IN, "auth", shareContent);
+        }
+
+        // Handle the successful return from the API call
+        function onSuccess(data) {
+           // console.log(JSON.stringify(data));
+            //console.log(data.picture-url);
+            console.log(data);
+            data1=JSON.stringify(data);
+            //document.getElementById("fn").value=data.firstName;
+           // document.getElementById("ln").value=data.lastName;
+
+            fn = document.createTextNode(data.firstName+" "+data.lastName);
+            //ln=document.createTextNode();
+            IN.API.Raw("/people/~:(id,num-connections,picture-url)?format=json").result(onSuccess1).error(onError);
+
+        }
+
+        function onSuccess1(data){
+            data2=JSON.stringify(data);
+            //document.getElementById('pic').value=data.pictureUrl;
+            //alert( document.getElementById("pic").value);
+            //document.createTextNode(data.pictureUrl);
+            pic=document.createElement('img');
+            pic.setAttribute('src',data.pictureUrl);
+            pic.setAttribute('alt','Profile Pic');
+            pic.setAttribute('class','img-responsive img-circle margin');
+            pic.setAttribute('style','display:inline');
+            pic.setAttribute('width','350');
+            pic.setAttribute('height','350');
+            a=document.createElement('a');
+            a.setAttribute('href','page2.html');
+            a.setAttribute('class','btn btn-default btn-lg');
+            ln=document.createTextNode("Update");
+            a.appendChild(ln);
+            console.log(data);
+            //document.getElementById("submit").click();
+            //document.getElementById("myForm").submit();
+
+            createDOM();
+        }
+
+        function createDOM(){
+
+            document.getElementById("div1").style.visibility='visible';
+            document.getElementById("div2").style.visibility='visible';
+            document.getElementById("h").style.visibility='hidden';
+
+            var h=document.createElement('h3');
+            var hnode=document.createTextNode("Welcome!");
+            h.appendChild(hnode);
+            var ele = document.getElementById("contact");
+            ele.appendChild(h);
+
+            var h1=document.createElement('h3');
+            h1.setAttribute('class','margin');
+            var h3node=document.createTextNode("Hello");
+            h1.appendChild(h3node);
+            var h2=document.createElement('h3');
+            h2.appendChild(fn);
+            //para.appendChild(node);
+            var element = document.getElementById("div1");
+            element.appendChild(h1);
+            element.appendChild(pic);
+            element.appendChild(h2);
+
+            var element2=document.getElementById("div2");
+            var h3=document.createElement('h3');
+            h3.setAttribute('class','margin');
+            var h1node=document.createTextNode('Post an update!');
+            h3.appendChild(h1node);
+
+            var p=document.createElement('p');
+            var ptext=document.createTextNode('Click the button to post an update to your linkedin profile');
+            p.appendChild(ptext);
+
+            element2.appendChild(h3);
+            element2.appendChild(p);
+            element2.appendChild(a);
+
+
+
+        }
+
+
+
+        // Handle an error response from the API call
+        function onError(error) {
+            console.log(error);
+
+        }
+
+        // Use the API call wrapper to request the member's basic profile data
+        function getProfileData() {
+           //IN.API.Raw("https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=77n4gr8j0vdx09&redirect_uri=https%3A%2F%2Fwww.linkedin.com&state=987654321&scope=r_basicprofile").result(onSuccess).error(onError);
+            IN.API.Raw("/people/~").result(onSuccess).error(onError);
+            //IN.API.Raw("/people/~:(id,num-connections,picture-url)?format=json").result(onSuccess).error(onError);
+            //window.location.href = "http://www.linkedin.com";
+            //IN.API.Raw("/oauth2/authorization?response_type=code&client_id=77n4gr8j0vdx09&redirect_uri=https%3A%2F%2Fwww.linkedin.com&state=987654321&scope=r_basicprofile").result(onSuccess).error(onError);
+        }
+
+
+
+
+    </script>
+
+</head>
+<body ng-app="myApp">
+
+<div id="contact" class="container-fluid bg-2 text-center" id="div3" style="visibility: visible">
+
+    <div class="row">
+        <div class="col-sm-5">
+            <h2 class="text-center" id="h">Connect to LinkedIn</h2>
+            <script type="IN/Login"></script>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-1 text-center" id = "div1" style="visibility: hidden">
+
+    </div>
+
+    <div class="container-fluid bg-2 text-center" id="div2" style="visibility: hidden">
+        </div>
+</body>
+</html>
